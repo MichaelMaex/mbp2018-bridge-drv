@@ -1,7 +1,7 @@
 #include "transfer.h"
 #include "../queue.h"
 #include "vhci.h"
-#include "../pci.h"
+#include "../apple-bce.h"
 #include <linux/usb/hcd.h>
 
 static void bce_vhci_transfer_queue_completion(struct bce_queue_sq *sq);

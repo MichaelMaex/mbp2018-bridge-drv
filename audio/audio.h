@@ -2,7 +2,7 @@
 #define AAUDIO_H
 
 #include <linux/types.h>
-#include "../pci.h"
+#include "../apple-bce.h"
 #include "protocol_bce.h"
 #include "description.h"
 
@@ -92,7 +92,7 @@ struct aaudio_device {
 
     struct aaudio_buffer_struct *bs;
 
-    struct bce_device *bce;
+    struct apple_bce_device *bce;
     struct aaudio_bce bcem;
 
     struct snd_card *card;

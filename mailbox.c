@@ -1,6 +1,6 @@
 #include "mailbox.h"
 #include <linux/atomic.h>
-#include "pci.h"
+#include "apple-bce.h"
 
 #define REG_MBOX_OUT_BASE 0x820
 #define REG_MBOX_REPLY_COUNTER 0x108

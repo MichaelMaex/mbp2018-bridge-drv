@@ -1,9 +1,9 @@
 #include "queue.h"
-#include "pci.h"
+#include "apple-bce.h"
 
 #define REG_DOORBELL_BASE 0x44000
 
-struct bce_queue_cq *bce_alloc_cq(struct bce_device *dev, int qid, u32 el_count)
+struct bce_queue_cq *bce_alloc_cq(struct apple_bce_device *dev, int qid, u32 el_count)
 {
     struct bce_queue_cq *q;
     q = kzalloc(sizeof(struct bce_queue_cq), GFP_KERNEL);
@@ -30,13 +30,13 @@ void bce_get_cq_memcfg(struct bce_queue_cq *cq, struct bce_queue_memcfg *cfg)
     cfg->length = cq->el_count * sizeof(struct bce_qe_completion);
 }
 
-void bce_free_cq(struct bce_device *dev, struct bce_queue_cq *cq)
+void bce_free_cq(struct apple_bce_device *dev, struct bce_queue_cq *cq)
 {
     dma_free_coherent(&dev->pci->dev, cq->el_count * sizeof(struct bce_qe_completion), cq->data, cq->dma_handle);
     kfree(cq);
 }
 
-static void bce_handle_cq_completion(struct bce_device *dev, struct bce_qe_completion *e, size_t *ce)
+static void bce_handle_cq_completion(struct apple_bce_device *dev, struct bce_qe_completion *e, size_t *ce)
 {
     struct bce_queue *target;
     struct bce_queue_sq *target_sq;
@@ -67,7 +67,7 @@ static void bce_handle_cq_completion(struct bce_device *dev, struct bce_qe_compl
     target_sq->completion_tail = (target_sq->completion_tail + 1) % target_sq->el_count;
 }
 
-void bce_handle_cq_completions(struct bce_device *dev, struct bce_queue_cq *cq)
+void bce_handle_cq_completions(struct apple_bce_device *dev, struct bce_queue_cq *cq)
 {
     size_t ce = 0;
     struct bce_qe_completion *e;
@@ -96,7 +96,7 @@ void bce_handle_cq_completions(struct bce_device *dev, struct bce_queue_cq *cq)
 }
 
 
-struct bce_queue_sq *bce_alloc_sq(struct bce_device *dev, int qid, u32 el_size, u32 el_count,
+struct bce_queue_sq *bce_alloc_sq(struct apple_bce_device *dev, int qid, u32 el_size, u32 el_count,
         bce_sq_completion compl, void *userdata)
 {
     struct bce_queue_sq *q;
@@ -132,7 +132,7 @@ void bce_get_sq_memcfg(struct bce_queue_sq *sq, struct bce_queue_cq *cq, struct 
     cfg->length = sq->el_count * sq->el_size;
 }
 
-void bce_free_sq(struct bce_device *dev, struct bce_queue_sq *sq)
+void bce_free_sq(struct apple_bce_device *dev, struct bce_queue_sq *sq)
 {
     dma_free_coherent(&dev->pci->dev, sq->el_count * sq->el_size, sq->data, sq->dma_handle);
     kfree(sq);
@@ -189,7 +189,7 @@ void bce_set_submission_single(struct bce_qe_submission *element, dma_addr_t add
 
 static void bce_cmdq_completion(struct bce_queue_sq *q);
 
-struct bce_queue_cmdq *bce_alloc_cmdq(struct bce_device *dev, int qid, u32 el_count)
+struct bce_queue_cmdq *bce_alloc_cmdq(struct apple_bce_device *dev, int qid, u32 el_count)
 {
     struct bce_queue_cmdq *q;
     q = kzalloc(sizeof(struct bce_queue_cmdq), GFP_KERNEL);
@@ -207,7 +207,7 @@ struct bce_queue_cmdq *bce_alloc_cmdq(struct bce_device *dev, int qid, u32 el_co
     return q;
 }
 
-void bce_free_cmdq(struct bce_device *dev, struct bce_queue_cmdq *cmdq)
+void bce_free_cmdq(struct apple_bce_device *dev, struct bce_queue_cmdq *cmdq)
 {
     bce_free_sq(dev, cmdq->sq);
     kfree(cmdq->tres);
@@ -315,7 +315,7 @@ u32 bce_cmd_flush_memory_queue(struct bce_queue_cmdq *cmdq, u16 qid)
 }
 
 
-struct bce_queue_cq *bce_create_cq(struct bce_device *dev, u32 el_count)
+struct bce_queue_cq *bce_create_cq(struct apple_bce_device *dev, u32 el_count)
 {
     struct bce_queue_cq *cq;
     struct bce_queue_memcfg cfg;
@@ -336,7 +336,7 @@ struct bce_queue_cq *bce_create_cq(struct bce_device *dev, u32 el_count)
     return cq;
 }
 
-struct bce_queue_sq *bce_create_sq(struct bce_device *dev, struct bce_queue_cq *cq, const char *name, u32 el_count,
+struct bce_queue_sq *bce_create_sq(struct apple_bce_device *dev, struct bce_queue_cq *cq, const char *name, u32 el_count,
         int direction, bce_sq_completion compl, void *userdata)
 {
     struct bce_queue_sq *sq;
@@ -365,7 +365,7 @@ struct bce_queue_sq *bce_create_sq(struct bce_device *dev, struct bce_queue_cq *
     return sq;
 }
 
-void bce_destroy_cq(struct bce_device *dev, struct bce_queue_cq *cq)
+void bce_destroy_cq(struct apple_bce_device *dev, struct bce_queue_cq *cq)
 {
     if (!dev->is_being_removed && bce_cmd_unregister_memory_queue(dev->cmd_cmdq, (u16) cq->qid))
         pr_err("bce: CQ unregister failed");
@@ -373,7 +373,7 @@ void bce_destroy_cq(struct bce_device *dev, struct bce_queue_cq *cq)
     bce_free_cq(dev, cq);
 }
 
-void bce_destroy_sq(struct bce_device *dev, struct bce_queue_sq *sq)
+void bce_destroy_sq(struct apple_bce_device *dev, struct bce_queue_sq *sq)
 {
     if (!dev->is_being_removed && bce_cmd_unregister_memory_queue(dev->cmd_cmdq, (u16) sq->qid))
         pr_err("bce: CQ unregister failed");

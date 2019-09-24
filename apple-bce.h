@@ -12,7 +12,7 @@
 #define BCE_QUEUE_USER_MIN 2
 #define BCE_QUEUE_USER_MAX (BCE_MAX_QUEUE_COUNT - 1)
 
-struct bce_device {
+struct apple_bce_device {
     struct pci_dev *pci;
     dev_t devt;
     struct device *dev;
@@ -30,4 +30,4 @@ struct bce_device {
     struct bce_vhci vhci;
 };
 
-extern struct bce_device *global_bce;
+extern struct apple_bce_device *global_bce;

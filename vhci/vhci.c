@@ -1,5 +1,5 @@
 #include "vhci.h"
-#include "../pci.h"
+#include "../apple-bce.h"
 #include "command.h"
 #include <linux/usb.h>
 #include <linux/usb/hcd.h>
@@ -15,7 +15,7 @@ static void bce_vhci_destroy_message_queues(struct bce_vhci *vhci);
 static void bce_vhci_handle_firmware_events_w(struct work_struct *ws);
 static void bce_vhci_firmware_event_completion(struct bce_queue_sq *sq);
 
-int bce_vhci_create(struct bce_device *dev, struct bce_vhci *vhci)
+int bce_vhci_create(struct apple_bce_device *dev, struct bce_vhci *vhci)
 {
     int status;
 

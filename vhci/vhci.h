@@ -12,7 +12,7 @@ struct bce_vhci_device {
     u32 tq_mask;
 };
 struct bce_vhci {
-    struct bce_device *dev;
+    struct apple_bce_device *dev;
     dev_t vdevt;
     struct device *vdev;
     struct usb_hcd *hcd;
@@ -43,7 +43,7 @@ struct bce_vhci {
 int __init bce_vhci_module_init(void);
 void __exit bce_vhci_module_exit(void);
 
-int bce_vhci_create(struct bce_device *dev, struct bce_vhci *vhci);
+int bce_vhci_create(struct apple_bce_device *dev, struct bce_vhci *vhci);
 void bce_vhci_destroy(struct bce_vhci *vhci);
 
 #endif //BCE_VHCI_H
