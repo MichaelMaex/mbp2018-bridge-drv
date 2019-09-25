@@ -2,7 +2,7 @@
 #define AAUDIO_H
 
 #include <linux/types.h>
-#include "../apple-bce.h"
+#include "../apple_bce.h"
 #include "protocol_bce.h"
 #include "description.h"
 

@@ -1,6 +1,6 @@
 #include "queue.h"
 #include "vhci.h"
-#include "../apple-bce.h"
+#include "../apple_bce.h"
 
 
 static void bce_vhci_message_queue_completion(struct bce_queue_sq *sq);

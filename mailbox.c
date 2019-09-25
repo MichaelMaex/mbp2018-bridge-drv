@@ -1,6 +1,6 @@
 #include "mailbox.h"
 #include <linux/atomic.h>
-#include "apple-bce.h"
+#include "apple_bce.h"
 
 #define REG_MBOX_OUT_BASE 0x820
 #define REG_MBOX_REPLY_COUNTER 0x108

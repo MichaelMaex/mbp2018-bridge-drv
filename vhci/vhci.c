@@ -1,5 +1,5 @@
 #include "vhci.h"
-#include "../apple-bce.h"
+#include "../apple_bce.h"
 #include "command.h"
 #include <linux/usb.h>
 #include <linux/usb/hcd.h>

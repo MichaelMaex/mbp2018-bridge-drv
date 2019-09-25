@@ -1,5 +1,5 @@
 #include "queue.h"
-#include "apple-bce.h"
+#include "apple_bce.h"
 
 #define REG_DOORBELL_BASE 0x44000
 

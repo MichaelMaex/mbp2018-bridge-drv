@@ -1,4 +1,4 @@
-#include "apple-bce.h"
+#include "apple_bce.h"
 #include <linux/module.h>
 #include "audio/audio.h"
 
