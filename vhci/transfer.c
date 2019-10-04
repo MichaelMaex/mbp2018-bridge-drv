@@ -373,6 +373,7 @@ static int bce_vhci_urb_data_transfer_in(struct bce_vhci_urb *urb, unsigned long
         reservation2 = bce_reserve_submission(urb->q->sq_in, timeout);
     if (reservation1 || reservation2) {
         pr_err("bce-vhci: Failed to reserve a submission for URB data transfer\n");
+        dump_stack();
         if (!reservation1)
             bce_cancel_submission_reservation(urb->q->vhci->msg_asynchronous.sq);
         return -ENOMEM;
